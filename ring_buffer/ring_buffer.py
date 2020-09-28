@@ -1,21 +1,44 @@
+# class RingBuffer:
+#     def __init__(self, capacity):
+#         self.capacity = capacity
+#         self.storage = []
+#         self.head = 0
+#         self.tail = 1
+
+#     def append(self, item):
+#         if len(self.storage) < self.capacity:
+#             self.storage.append(item)
+#         if len(self.storage) == self.capacity:
+#             self.storage.pop(self.head)
+#             self.storage.insert(self.tail, item)
+#             self.head += 1
+#             self.tail += 1
+
+#     def get(self):
+#         return self.storage
+
+
 class RingBuffer:
     def __init__(self, capacity):
         self.capacity = capacity
-        self.storage = []
+        self.storage = [None for i in range(self.capacity+1)]
         self.head = 0
-        self.tail = 1
+        self.tail = 0
 
     def append(self, item):
-        if len(self.storage) < self.capacity:
-            self.storage.append(item)
-        if len(self.storage) == self.capacity:
-            self.storage.pop(self.head)
-            self.storage.insert(self.tail, item)
-            self.head += 1
+        self.storage[self.head] = item
+        self.head += 1
+        if self.head == self.capacity:
+            self.head = 0
+        if self.head == self.tail:
             self.tail += 1
+        if self.tail == self.capacity:
+            self.tail = 0
 
     def get(self):
-        return self.storage
+        if self.head == self.tail:
+            return []
+        return list(filter(lambda x: x != None, self.storage))
 
 
 dog = RingBuffer(5)
